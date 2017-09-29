@@ -1923,7 +1923,7 @@ public final class Launcher extends Activity
      * @param v The view that was clicked.
      */
     public void onClickAllAppsButton(View v) {
-        showAllApps(true);
+        //showAllApps(true);
     }
 
     public void onTouchDownAllAppsButton(View v) {

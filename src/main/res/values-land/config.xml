@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2016 Capital Alliance Software(Pekall)
+  ~                  All Rights Reserved
+  ~ NOTICE: All information contained herein is, and remains the property of
+  ~ Pekall and its suppliers,if any. The intellectual and technical concepts
+  ~ contained herein are proprietary to Pekall and its suppliers and may be
+  ~ covered by P.R.C, U.S. and Foreign Patents, patents in process, and are
+  ~ protected by trade secret or copyright law. Dissemination of this
+  ~ information or reproduction of this material is strictly forbidden unless
+  ~ prior written permission is obtained from Pekall.
+  ~                  www.pekall.com
+  -->
+
+<resources>
+<!-- Workspace -->
+    <!-- Whether or not the drop targets drop down as opposed to fade in -->
+    <bool name="config_useDropTargetDownTransition">false</bool>
+    <!-- Whether or not to fade the side pages -->
+    <bool name="config_workspaceFadeAdjacentScreens">false</bool>
+
+    <!-- Folder max bounds and max number of items.
+         Note: folder_max_count_x * folder_max_count_y >= folder_max_num_items. -->
+    <integer name="folder_max_count_x">6</integer>
+    <integer name="folder_max_count_y">3</integer>
+</resources>

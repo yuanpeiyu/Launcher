@@ -1,0 +1,125 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+    }
+}
+
+
+buildscript {
+    repositories {
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/groups/public'
+        }
+        /*maven {
+            url "http://192.168.10.224:8081/nexus/content/groups/public"
+        }*/
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.0'
+    }
+}
+
+repositories {
+    maven {
+        url 'http://maven.aliyun.com/nexus/content/groups/public'
+    }
+    maven {
+        url "http://192.168.10.224:8081/nexus/content/groups/public"
+    }
+
+    /*flatDir{
+        dirs 'libs/aar'
+    }*/
+//    mavenLocal()
+}
+
+
+apply plugin: 'com.android.application'
+apply plugin: 'maven-publish'
+
+group 'com.pekall.emdm.launcher'
+version '1.0.0'
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'launcher'
+            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
+        }
+    }
+    repositories {
+        maven {
+            url 'http://192.168.10.224:8081/nexus/content/repositories/com.pekall.lib.mdm'
+            credentials {
+                username 'admin'
+                password 'admin123'
+            }
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'http://192.168.10.224:8081/nexus/content/groups/public' }
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 18
+    }
+
+
+lintOptions {
+    // set to true to turn off analysis progress reporting by lint
+    quiet true
+    // if true, stop the gradle build if errors are found
+    abortOnError false
+    // if true, only report errors
+    ignoreWarnings true
+    // if true, emit full/absolute paths to files with errors (true by default)
+    //absolutePaths true
+    // if true, check all issues, including those that are off by default
+    checkAllWarnings true
+    // if true, treat all warnings as errors
+    warningsAsErrors true
+    // turn off checking the given issue id's
+    disable 'TypographyFractions','TypographyQuotes'
+    // turn on the given issue id's
+    disable 'RtlHardcoded','RtlCompat', 'RtlEnabled'
+    // check *only* the given issue id's
+    check 'NewApi', 'InlinedApi'
+    // if true, don't include source code lines in the error output
+    noLines true
+    // if true, show all locations for an error, do not truncate lists, etc.
+            showAll true
+    // Fallback lint configuration (default severities, etc.)
+    lintConfig file("default-lint.xml")
+    // if true, generate a text report of issues (false by default)
+    textReport true
+    // location to write the output; can be a file or 'stdout'
+    textOutput 'stdout'
+    // if true, generate an XML report for use by for example Jenkins
+    xmlReport true
+    // file to write report to (if not specified, defaults to lint-results.xml)
+    xmlOutput file("lint-report.xml")
+    // if true, generate an HTML report (with issue explanations,  sourcecode, etc)
+    htmlReport false
+    // optional path to report (default will be lint-results.html in the builddir)
+    htmlOutput file("lint-report.html")
+}
+
+}
+
+dependencies {
+    //Android dependency
+    compile 'com.android.support:support-v4:18.0.+'
+    compile 'com.pekall.lib.jwt:MdmSDK:1.1.20'
+    compile 'com.pekall.lib.mdm3.1:mdm-common-lib:3.1.1'
+}

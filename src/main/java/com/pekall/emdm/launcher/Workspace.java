@@ -39,6 +39,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -378,6 +379,20 @@ public class Workspace extends SmoothPagedView
         }
     }
 
+    @Override
+    public View getChildAt(int index) {
+        Log.i("ypy", "getChildAt : " + index);
+        if (getChildCount() == 0) {
+            addCellLayout();
+        }
+        return super.getChildAt(index);
+    }
+
+    private void addCellLayout() {
+        CellLayout layout = (CellLayout) LayoutInflater.from(getContext()).inflate(R.layout.workspace_screen, null);
+        addView(layout);
+    }
+
     public void onDragStart(DragSource source, Object info, int dragAction) {
         mIsDragOccuring = true;
         updateChildrenLayersEnabled();
@@ -417,7 +432,7 @@ public class Workspace extends SmoothPagedView
             // In this case, we will skip drawing background protection
         }
 
-        mWallpaperOffset = new WallpaperOffsetInterpolator();
+        //mWallpaperOffset = new WallpaperOffsetInterpolator();
         Display display = mLauncher.getWindowManager().getDefaultDisplay();
         display.getSize(mDisplaySize);
         mWallpaperTravelWidth = (int) (mDisplaySize.x *
@@ -492,6 +507,15 @@ public class Workspace extends SmoothPagedView
         addInScreen(child, container, screen, x, y, spanX, spanY, false);
     }
 
+    void checkScreenExist(int screen) {
+        if (getChildAt(screen) == null) {
+            int i = getChildCount();
+            for (; i <= screen; i++) {
+                addCellLayout();
+            }
+        }
+    }
+
     /**
      * Adds the specified child in the specified screen. The position and dimension of
      * the child are defined by x, y, spanX and spanY.
@@ -506,6 +530,7 @@ public class Workspace extends SmoothPagedView
      */
     void addInScreen(View child, long container, int screen, int x, int y, int spanX, int spanY,
             boolean insert) {
+        checkScreenExist(screen);
         if (container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
             if (screen < 0 || screen >= getChildCount()) {
                 Log.e(TAG, "The screen must be >= 0 and < " + getChildCount()
@@ -653,14 +678,14 @@ public class Workspace extends SmoothPagedView
             mXDown = ev.getX();
             mYDown = ev.getY();
             break;
-        case MotionEvent.ACTION_POINTER_UP:
+        /*case MotionEvent.ACTION_POINTER_UP:
         case MotionEvent.ACTION_UP:
             if (mTouchState == TOUCH_STATE_REST) {
                 final CellLayout currentPage = (CellLayout) getChildAt(mCurrentPage);
-                if (!currentPage.lastDownOnOccupiedCell()) {
+                if (currentPage != null && !currentPage.lastDownOnOccupiedCell()) {
                     onWallpaperTap(ev);
                 }
-            }
+            }*/
         }
         return super.onInterceptTouchEvent(ev);
     }
@@ -837,6 +862,7 @@ public class Workspace extends SmoothPagedView
 
     // The range of scroll values for Workspace
     private int getScrollRange() {
+        Log.i("ypy", "getChildCount == " + getChildCount());
         return getChildOffset(getChildCount() - 1) - getChildOffset(0);
     }
 
@@ -959,7 +985,7 @@ public class Workspace extends SmoothPagedView
         // Here, we determine what the desired scroll would be with and without a layout scale,
         // and compute a ratio between the two. This allows us to adjust the wallpaper offset
         // as though there is no layout scale.
-        float layoutScale = mLayoutScale;
+        /*float layoutScale = mLayoutScale;
         int scaled = getChildOffset(page) - getRelativeChildOffset(page);
         mLayoutScale = 1.0f;
         float unscaled = getChildOffset(page) - getRelativeChildOffset(page);
@@ -968,7 +994,7 @@ public class Workspace extends SmoothPagedView
             mWallpaperScrollRatio = (1.0f * unscaled) / scaled;
         } else {
             mWallpaperScrollRatio = 1f;
-        }
+        }*/
     }
 
     class WallpaperOffsetInterpolator {
@@ -1085,7 +1111,7 @@ public class Workspace extends SmoothPagedView
     @Override
     public void computeScroll() {
         super.computeScroll();
-        syncWallpaperOffsetWithScroll();
+        //syncWallpaperOffsetWithScroll();
     }
 
     void showOutlines() {
@@ -1303,15 +1329,15 @@ public class Workspace extends SmoothPagedView
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        if (mFirstLayout && mCurrentPage >= 0 && mCurrentPage < getChildCount()) {
+        /*if (mFirstLayout && mCurrentPage >= 0 && mCurrentPage < getChildCount()) {
             mUpdateWallpaperOffsetImmediately = true;
-        }
+        }*/
         super.onLayout(changed, left, top, right, bottom);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        updateWallpaperOffsets();
+        //updateWallpaperOffsets();
 
         // Draw the background gradient if necessary
         if (mBackground != null && mBackgroundAlpha > 0.0f && mDrawBackground) {
@@ -1418,7 +1444,7 @@ public class Workspace extends SmoothPagedView
     }
 
     protected void onWallpaperTap(MotionEvent ev) {
-        final int[] position = mTempCell;
+        /*final int[] position = mTempCell;
         getLocationOnScreen(position);
 
         int pointerIndex = ev.getActionIndex();
@@ -1428,7 +1454,7 @@ public class Workspace extends SmoothPagedView
         mWallpaperManager.sendWallpaperCommand(getWindowToken(),
                 ev.getAction() == MotionEvent.ACTION_UP
                         ? WallpaperManager.COMMAND_TAP : WallpaperManager.COMMAND_SECONDARY_TAP,
-                position[0], position[1], 0, null);
+                position[0], position[1], 0, null);*/
     }
 
     /*
@@ -1714,7 +1740,7 @@ public class Workspace extends SmoothPagedView
     @Override
     public void onLauncherTransitionEnd(Launcher l, boolean animated, boolean toWorkspace) {
         mIsSwitchingState = false;
-        mWallpaperOffset.setOverrideHorizontalCatchupConstant(false);
+        //mWallpaperOffset.setOverrideHorizontalCatchupConstant(false);
         updateChildrenLayersEnabled();
         // The code in getChangeStateAnimation to determine initialAlpha and finalAlpha will ensure
         // ensure that only the current page is visible during (and subsequently, after) the
@@ -2973,6 +2999,7 @@ public class Workspace extends SmoothPagedView
 
     private void onDropExternal(int[] touchXY, Object dragInfo,
             CellLayout cellLayout, boolean insertAtFirst) {
+        Log.i("ypy", "call onDropExternal 1");
         onDropExternal(touchXY, dragInfo, cellLayout, insertAtFirst, null);
     }
 
@@ -2992,6 +3019,7 @@ public class Workspace extends SmoothPagedView
                 mLauncher.exitSpringLoadedDragModeDelayed(true, false, null);
             }
         };
+        Log.i("ypy", "call onDropExternal 2");
 
         ItemInfo info = (ItemInfo) dragInfo;
         int spanX = info.spanX;
@@ -3323,7 +3351,7 @@ public class Workspace extends SmoothPagedView
         // hardware layers on children are enabled on startup, but should be disabled until
         // needed
         updateChildrenLayersEnabled();
-        setWallpaperDimension();
+        //setWallpaperDimension();
     }
 
     /**

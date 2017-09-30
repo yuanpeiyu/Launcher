@@ -204,7 +204,7 @@ public class LauncherProvider extends ContentProvider {
     }
 
     synchronized public void loadDefaultFavoritesIfNecessary() {
-        String spKey = LauncherApplication.getSharedPreferencesKey();
+        /*String spKey = LauncherApplication.getSharedPreferencesKey();
         SharedPreferences sp = getContext().getSharedPreferences(spKey, Context.MODE_PRIVATE);
         if (sp.getBoolean(DB_CREATED_BUT_DEFAULT_WORKSPACE_NOT_LOADED, false)) {
             // Populate favorites table with initial favorites
@@ -212,7 +212,7 @@ public class LauncherProvider extends ContentProvider {
             editor.remove(DB_CREATED_BUT_DEFAULT_WORKSPACE_NOT_LOADED);
             mOpenHelper.loadFavorites(mOpenHelper.getWritableDatabase(), R.xml.default_workspace);
             editor.commit();
-        }
+        }*/
     }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -473,7 +473,7 @@ public class LauncherProvider extends ContentProvider {
                 }
 
                 // Add default hotseat icons
-                loadFavorites(db, R.xml.update_workspace);
+                //loadFavorites(db, R.xml.update_workspace);
                 version = 9;
             }
 

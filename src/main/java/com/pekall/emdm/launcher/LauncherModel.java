@@ -27,6 +27,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -840,6 +841,7 @@ public class LauncherModel extends BroadcastReceiver {
         }
 
         private void loadAndBindWorkspace() {
+            initData();
             mIsLoadingAndBindingWorkspace = true;
 
             // Load the workspace
@@ -859,6 +861,45 @@ public class LauncherModel extends BroadcastReceiver {
 
             // Bind the workspace
             bindWorkspace(-1);
+        }
+
+        private void initData() {
+            SharedPreferences preferences = mContext.getSharedPreferences("launcher", Context.MODE_PRIVATE);
+            if (!preferences.getBoolean("init", false)) {
+                init();
+            }
+        }
+
+        private void init() {
+            PackageManager manager = mContext.getPackageManager();
+            String me = mContext.getPackageName();
+            int col = mCellCountX == 0 ? mContext.getResources().getInteger(R.integer.cell_count_x) : mCellCountX;
+            int row = mCellCountY == 0 ? mContext.getResources().getInteger(R.integer.cell_count_y) : mCellCountY;
+            int totle = row * col;
+            List<ResolveInfo> infos = manager.queryIntentActivities(getLauncherIntent(), 0);
+            if (infos != null && !infos.isEmpty()) {
+                int i = 0;
+                for (ResolveInfo info : infos) {
+                    if (me.equals(info.activityInfo.applicationInfo.packageName)) {
+                        continue;
+                    }
+                    Log.i("ypy", "i = " + i + ", app = " + info.loadLabel(manager));
+                    ApplicationInfo aInfo = new ApplicationInfo(manager, info,
+                            mIconCache, mLabelCache);
+                    addOrMoveItemInDatabase(mContext, aInfo,
+                            LauncherSettings.Favorites.CONTAINER_DESKTOP,
+                            i / totle,
+                            i % col,
+                            i / row - i / totle * i / col);
+                    i++;
+                }
+            }
+        }
+
+        private Intent getLauncherIntent() {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            return intent;
         }
 
         private void waitForIdle() {

@@ -667,6 +667,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
     }
 
     protected void invalidateCachedOffsets() {
+        Log.i("ypy", "invalidateCachedOffsets : " + getChildCount());
         int count = getChildCount();
         if (count == 0) {
             mChildOffsets = null;

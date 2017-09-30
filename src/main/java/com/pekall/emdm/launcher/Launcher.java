@@ -1923,7 +1923,7 @@ public final class Launcher extends Activity
      * @param v The view that was clicked.
      */
     public void onClickAllAppsButton(View v) {
-        //showAllApps(true);
+        showAllApps(true);
     }
 
     public void onTouchDownAllAppsButton(View v) {
@@ -2226,6 +2226,7 @@ public final class Launcher extends Activity
                 mWorkspace.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
                         HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 startWallpaper();
+                //TODO:长按空白出,这里可以改为添加widget
             } else {
                 if (!(itemUnderLongClick instanceof Folder)) {
                     // User long pressed on an item
@@ -3743,3 +3744,5 @@ interface LauncherTransitionable {
     void onLauncherTransitionStep(Launcher l, float t);
     void onLauncherTransitionEnd(Launcher l, boolean animated, boolean toWorkspace);
 }
+
+

@@ -92,9 +92,9 @@ public class InfoDropTarget extends ButtonDropTarget {
         boolean isVisible = true;
 
         // Hide this button unless we are dragging something from AllApps
-        if (!isFromAllApps(source)) {
+        /*if (!isFromAllApps(source)) {
             isVisible = false;
-        }
+        }*/
         ComponentName componentName = null;
         if (info instanceof ApplicationInfo) {
             componentName = ((ApplicationInfo) info).componentName;

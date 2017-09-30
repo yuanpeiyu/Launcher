@@ -23,6 +23,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
@@ -70,6 +71,18 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         dragController.setFlingToDeleteDropTarget(mDeleteDropTarget);
         mInfoDropTarget.setLauncher(launcher);
         mDeleteDropTarget.setLauncher(launcher);
+    }
+
+    @Override
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        Log.i("ypy", "SearchDropTargetBar setVisibility visibility = " + visibility );
+    }
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        Log.i("ypy", "SearchDropTargetBar onVisibilityChanged visibility = " + visibility );
     }
 
     private void prepareStartAnimation(View v) {

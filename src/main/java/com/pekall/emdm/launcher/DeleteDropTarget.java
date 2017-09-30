@@ -143,7 +143,7 @@ public class DeleteDropTarget extends ButtonDropTarget {
 
         // If we are dragging an application from AppsCustomize, only show the control if we can
         // delete the app (it was downloaded), and rename the string to "uninstall" in such a case
-        if (isAllAppsApplication(source, info)) {
+        if (/*isAllAppsApplication(source, info)*/info instanceof ApplicationInfo || info instanceof ShortcutInfo) {
             ApplicationInfo appInfo = (ApplicationInfo) info;
             if ((appInfo.flags & ApplicationInfo.DOWNLOADED_FLAG) != 0 && !appInfo.getPackageName().equals(getContext().getPackageName())) {
                 isUninstall = true;

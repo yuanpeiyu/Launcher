@@ -17,6 +17,7 @@
 package com.pekall.emdm.launcher;
 
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -140,5 +141,12 @@ class ApplicationInfo extends ItemInfo {
 
     public ShortcutInfo makeShortcut() {
         return new ShortcutInfo(this);
+    }
+
+    @Override
+    void onAddToDatabase(ContentValues values) {
+        super.onAddToDatabase(values);
+        String uri = intent != null ? intent.toUri(0) : null;
+        values.put(LauncherSettings.BaseLauncherColumns.INTENT, uri);
     }
 }
